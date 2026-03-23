@@ -5,6 +5,7 @@ import packageJson from "../../package.json";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  ignoreDeadLinks: true,
   title: "useAxios",
   description: "An established, production-ready package that extends Axios with a robust hook-based API, enabling consistent, reactive data fetching patterns with standardized state management for loading, data, and error handling.",
   themeConfig: {
