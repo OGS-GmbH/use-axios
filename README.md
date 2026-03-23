@@ -1,24 +1,92 @@
 > *We're OGS, check out our work on [github.com/ogs-gmbh](https://github.com/ogs-gmbh)*
 
-# Project Template for React
+# useAxios
 
-*A project template with a ready-to-use structure.*
+*An established, production-ready package that extends Axios with a robust hook-based API, enabling consistent, reactive data fetching patterns with standardized state management for loading, data, and error handling.*
 
 ![Preview](./docs/preview.avif)
 
-<a href="./LICENSE" target="_blank"><img src="https://img.shields.io/github/license/OGS-GmbH/_react-template?color=0f434e&logo=hackthebox&logoColor=000000&labelColor=ffffff" /></a>
+<a href="./LICENSE" target="_blank"><img src="https://img.shields.io/github/license/OGS-GmbH/use-axios?color=0f434e&logo=hackthebox&logoColor=000000&labelColor=ffffff" /></a>
+<a href="https://github.com/OGS-GmbH/use-axios/actions/workflows/main-deploy.yml" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/OGS-GmbH/use-axios/main-deploy.yml?color=0f434e&logo=rocket&logoColor=000000&labelColor=ffffff" /></a>
+<a href="https://www.npmjs.com/package/@ogs-gmbh/use-axios" target="_blank"><img src="https://img.shields.io/npm/v/%40ogs-gmbh%2Fuse-axios?color=0f434e&logo=npm&logoColor=000000&labelColor=ffffff" /></a>
 
-- **Easy to Set Up**\
-  Simple configuration lets you start your projects quickly without complex setup.
+- **Hook-Based API**\
+  Provides a declarative interface for HTTP requests, enabling reactive and composable data fetching.
 
-- **Preconfigured Tooling**\
-  Includes Oxlint, ESLint and TypeScript configs out of the box.
+- **Automatic State Management**\
+  Handles `loading`, `data`, and `error` states internally, reducing boilerplate and ensuring consistent UI behavior.
 
-- **Modular Structure**\
-  Organized folder layout for scalable and maintainable projects.
+- **Request Cancellation**\
+  Supports aborting ongoing requests to prevent race conditions and optimize resource usage.
 
-- **Development Friendly**\
-  Quick start with minimal setup required for new applications.
+- **Flexible Execution Control**\
+  Allows both automatic execution on mount and manual triggering for precise, dependency-driven requests.
+
+## Getting Started
+
+> [!IMPORTANT]
+> We're offering an extensive API-Reference covered with in-depth usage examples of this project.
+
+To get a starting point, simply refer to our documentation at [ogs-gmbh.github.io/use-axios](https://ogs-gmbh.github.io/use-axios).
+
+### Prerequisites
+
+- Node.js version 18 or higher
+- A package manager: e.g. npm, pnpm, ...
+
+### Installation
+
+Using npm:
+```sh
+$ npm install @ogs-gmbh/use-axios
+```
+
+<details>
+  <summary>Using a different package managers?</summary>
+  <br/>
+  
+  Using yarn:
+  ```sh
+  $ pnpm add @ogs-gmbh/use-axios
+  ```
+  
+  Using pnpm:
+  ```sh
+  $ pnpm add @ogs-gmbh/use-axios
+  ```
+  
+  Using bun:
+  ```sh
+  $ bun add @ogs-gmbh/use-axios
+  ```
+
+</details>
+
+### Usage
+
+Here we provide a simple example. Get a deeper understanding in our [`reference`](https://ogs-gmbh.github.io/use-axios/reference).
+
+```tsx [example.ts]
+import { useAxios } from "@ogs-gmbh/use-axios";
+
+function MyComponent () {
+  const { hasError, data } = useAxios({
+    method: "get",
+    url: "https://jsonplaceholder.typicode.com/todos/1"
+  })
+
+  return (
+    <>
+      {
+        hasError
+          ? "Request failed. Try again."
+          : <p>{data.title}</p>
+      }
+    </>
+  )
+}
+```
+
 
 ## License
 
