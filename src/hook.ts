@@ -38,10 +38,12 @@ function useAxios <
   TError
 > ({immediate, instance, ...axiosRequestConfig}: UseAxiosOptions): UseAxiosReturn<TData, TError> {
   const axiosInstance = useRef<AxiosInstance>(instance || axios);
+  if (axiosInstance.current !== (instance || axios))
+    axiosInstance.current = instance || axios;
   const [cycle, setCycle] = useState<UseAxiosCycle>("pending");
   const [response, setResponse] = useState<AxiosResponse<TData, TError> | null>(null);
   const isLoading = useMemo(() => cycle === "loading", [cycle]);
-  const hasFinished = useMemo(() => (["error", "success", "canceled"] as UseAxiosCycle[]).includes(cycle), [cycle]);
+  const hasFinished = useMemo(() => (["error", "success", "aborted"] as UseAxiosCycle[]).includes(cycle), [cycle]);
   const hasError = useMemo(() => cycle === "error", [cycle]);
   const hasSuccess = useMemo(() => cycle === "success", [cycle]);
   const isPending = useMemo(() => cycle === "pending", [cycle]);
@@ -77,6 +79,7 @@ function useAxios <
   useEffect(() => {
     if (immediate)
       execute()
+    return () => { abort() }
   }, [immediate])
 
   return {

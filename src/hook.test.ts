@@ -76,5 +76,11 @@ describe("useAxios", () => {
     }));
 
     await expect(result.current.execute()).rejects.toThrow("Network error");
+
+    await waitFor(() => {
+      expect(result.current.hasError).toBe(true);
+      expect(result.current.cycle).toBe("error");
+      expect(result.current.hasFinished).toBe(true);
+    });
   })
 }) 
