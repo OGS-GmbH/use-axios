@@ -6,9 +6,9 @@
 
 ![Preview](./docs/preview.avif)
 
-<a href="./LICENSE" target="_blank"><img src="https://img.shields.io/github/license/OGS-GmbH/use-axios?color=0f434e&logo=hackthebox&logoColor=000000&labelColor=ffffff" /></a>
-<a href="https://github.com/OGS-GmbH/use-axios/actions/workflows/main-deploy.yml" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/OGS-GmbH/use-axios/main-deploy.yml?color=0f434e&logo=rocket&logoColor=000000&labelColor=ffffff" /></a>
-<a href="https://www.npmjs.com/package/@ogs-gmbh/use-axios" target="_blank"><img src="https://img.shields.io/npm/v/%40ogs-gmbh%2Fuse-axios?color=0f434e&logo=npm&logoColor=000000&labelColor=ffffff" /></a>
+<a href="./LICENSE" target="_blank"><img src="https://img.shields.io/github/license/OGS-GmbH/use-axios?color=0f434e&logo=hackthebox&logoColor=000000&labelColor=ffffff" alt="License" /></a>
+<a href="https://github.com/OGS-GmbH/use-axios/actions/workflows/main-deploy.yml" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/OGS-GmbH/use-axios/main-deploy.yml?color=0f434e&logo=rocket&logoColor=000000&labelColor=ffffff" alt="Build Status" /></a>
+<a href="https://www.npmjs.com/package/@ogs-gmbh/use-axios" target="_blank"><img src="https://img.shields.io/npm/v/%40ogs-gmbh%2Fuse-axios?color=0f434e&logo=npm&logoColor=000000&labelColor=ffffff" alt="npm version" /></a>
 
 - **Hook-Based API**\
   Provides a declarative interface for HTTP requests, enabling reactive and composable data fetching.

@@ -41,7 +41,10 @@
     "ci:pr:lint:main:eslint": "eslint .",
     "ci:test:main:vitest": "vitest run --coverage",
     "commit": "commit",
+    "lint": "eslint .",
     "prepare": "husky",
+    "test": "vitest run",
+    "type-check": "tsc --noEmit",
     "vitepress": "bash ./.vitepress/scripts/pre-vitepress.sh && vitepress dev .vitepress",
     "vitepress:preview": "vitepress preview .vitepress"
   },
