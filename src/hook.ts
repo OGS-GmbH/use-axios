@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios"
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { UseAxiosAbortFn, UseAxiosCycle, UseAxiosOptions, UseAxiosReturn } from "./types";
 
 /**
@@ -33,10 +33,10 @@ import type { UseAxiosAbortFn, UseAxiosCycle, UseAxiosOptions, UseAxiosReturn } 
  * @since 1.0.0
  * @author Simon Kovtyk
  */
-function useAxios <
+function useAxios<
   TData,
   TError
-> ({immediate, instance, ...axiosRequestConfig}: UseAxiosOptions): UseAxiosReturn<TData, TError> {
+>({ immediate, instance, ...axiosRequestConfig }: UseAxiosOptions): UseAxiosReturn<TData, TError> {
   const axiosInstance = useRef<AxiosInstance>(instance || axios);
   const [cycle, setCycle] = useState<UseAxiosCycle>("pending");
   const [response, setResponse] = useState<AxiosResponse<TData, TError> | null>(null);
@@ -47,32 +47,38 @@ function useAxios <
   const isPending = useMemo(() => cycle === "pending", [cycle]);
   const hasAborted = useMemo(() => cycle === "aborted", [cycle]);
   const abortController = useRef(new AbortController());
+  const axiosRequestConfigRef = useRef(axiosRequestConfig);
+  const execute = useCallback((executeAxiosRequestConfig?: AxiosRequestConfig): Promise<AxiosResponse<TData, TError>> => {
+    setCycle("loading");
 
-  function abort (): ReturnType<UseAxiosAbortFn> {
+    const thenableResponse = axiosInstance.current.request<TData>({
+      signal: abortController.current.signal,
+      ...axiosRequestConfigRef.current,
+      ...executeAxiosRequestConfig
+    });
+
+    return new Promise((resolve) => {
+      thenableResponse.then((thenableInnerResponse) => {
+        setCycle("success");
+        setResponse(thenableInnerResponse)
+        resolve(thenableInnerResponse);
+      }).catch((thenableInnerResponse) => {
+        setCycle("error");
+        setResponse(thenableInnerResponse);
+        resolve(thenableInnerResponse);
+      });
+    });
+  }, [setCycle, setResponse]);
+
+  function abort(): ReturnType<UseAxiosAbortFn> {
     abortController.current.abort();
     setCycle("aborted");
     abortController.current = new AbortController();
   }
 
-  function execute (executeAxiosRequestConfig?: AxiosRequestConfig): Promise<AxiosResponse<TData, TError>> {
-    setCycle("loading");
-
-    const thenableResponse = axiosInstance.current.request<TData>({
-      signal: abortController.current.signal,
-      ...axiosRequestConfig,
-      ...executeAxiosRequestConfig
-    });
-
-    thenableResponse.then((thenableInnerResponse) => {
-      setCycle("success");
-      setResponse(thenableInnerResponse)
-    }).catch((thenableInnerResponse) => {
-      setCycle("error");
-      setResponse(thenableInnerResponse);
-    });
-
-    return thenableResponse;
-  }
+  useEffect(() => {
+    axiosRequestConfigRef.current = axiosRequestConfig;
+  }, [axiosRequestConfig])
 
   useEffect(() => {
     if (immediate)

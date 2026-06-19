@@ -1,2 +1,2 @@
-export * from "./hook";
-export * from "./types";
+export * from "./hook.js";
+export * from "./types.js";
