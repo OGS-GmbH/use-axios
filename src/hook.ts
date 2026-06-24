@@ -1,6 +1,6 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios"
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { UseAxiosAbortFn, UseAxiosCycle, UseAxiosOptions, UseAxiosReturn } from "./types";
+import type { UseAxiosAbortFn, UseAxiosCycle, UseAxiosOptions, UseAxiosReturn } from "./types.js";
 
 /**
  * React hook for handling Axios requests with support for request cancellation and state management.
@@ -33,42 +33,51 @@ import type { UseAxiosAbortFn, UseAxiosCycle, UseAxiosOptions, UseAxiosReturn } 
  * @since 1.0.0
  * @author Simon Kovtyk
  */
-function useAxios<
-  TData,
-  TError
->({ immediate, instance, ...axiosRequestConfig }: UseAxiosOptions): UseAxiosReturn<TData, TError> {
+function useAxios<TData, TError>({
+  immediate,
+  instance,
+  ...axiosRequestConfig
+}: UseAxiosOptions): UseAxiosReturn<TData, TError> {
   const axiosInstance = useRef<AxiosInstance>(instance || axios);
   const [cycle, setCycle] = useState<UseAxiosCycle>("pending");
   const [response, setResponse] = useState<AxiosResponse<TData, TError> | null>(null);
   const isLoading = useMemo(() => cycle === "loading", [cycle]);
-  const hasFinished = useMemo(() => (["error", "success", "canceled"] as UseAxiosCycle[]).includes(cycle), [cycle]);
+  const hasFinished = useMemo(
+    () => (["error", "success", "canceled"] as UseAxiosCycle[]).includes(cycle),
+    [cycle]
+  );
   const hasError = useMemo(() => cycle === "error", [cycle]);
   const hasSuccess = useMemo(() => cycle === "success", [cycle]);
   const isPending = useMemo(() => cycle === "pending", [cycle]);
   const hasAborted = useMemo(() => cycle === "aborted", [cycle]);
   const abortController = useRef(new AbortController());
   const axiosRequestConfigRef = useRef(axiosRequestConfig);
-  const execute = useCallback((executeAxiosRequestConfig?: AxiosRequestConfig): Promise<AxiosResponse<TData, TError>> => {
-    setCycle("loading");
+  const execute = useCallback(
+    (executeAxiosRequestConfig?: AxiosRequestConfig): Promise<AxiosResponse<TData, TError>> => {
+      setCycle("loading");
 
-    const thenableResponse = axiosInstance.current.request<TData>({
-      signal: abortController.current.signal,
-      ...axiosRequestConfigRef.current,
-      ...executeAxiosRequestConfig
-    });
-
-    return new Promise((resolve) => {
-      thenableResponse.then((thenableInnerResponse) => {
-        setCycle("success");
-        setResponse(thenableInnerResponse)
-        resolve(thenableInnerResponse);
-      }).catch((thenableInnerResponse) => {
-        setCycle("error");
-        setResponse(thenableInnerResponse);
-        resolve(thenableInnerResponse);
+      const thenableResponse = axiosInstance.current.request<TData>({
+        signal: abortController.current.signal,
+        ...axiosRequestConfigRef.current,
+        ...executeAxiosRequestConfig
       });
-    });
-  }, [setCycle, setResponse]);
+
+      return new Promise((resolve) => {
+        thenableResponse
+          .then((thenableInnerResponse) => {
+            setCycle("success");
+            setResponse(thenableInnerResponse);
+            resolve(thenableInnerResponse);
+          })
+          .catch((thenableInnerResponse) => {
+            setCycle("error");
+            setResponse(thenableInnerResponse);
+            resolve(thenableInnerResponse);
+          });
+      });
+    },
+    [setCycle, setResponse]
+  );
 
   function abort(): ReturnType<UseAxiosAbortFn> {
     abortController.current.abort();
@@ -78,12 +87,11 @@ function useAxios<
 
   useEffect(() => {
     axiosRequestConfigRef.current = axiosRequestConfig;
-  }, [axiosRequestConfig])
+  }, [axiosRequestConfig]);
 
   useEffect(() => {
-    if (immediate)
-      execute()
-  }, [immediate])
+    if (immediate) execute();
+  }, [immediate]);
 
   return {
     execute,
@@ -96,9 +104,7 @@ function useAxios<
     hasSuccess,
     abort,
     ...response
-  }
+  };
 }
 
-export {
-  useAxios
-}
+export { useAxios };
