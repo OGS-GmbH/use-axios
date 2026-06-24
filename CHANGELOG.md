@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/OGS-GmbH/use-axios/compare/v1.0.1...v1.0.2) (2026-06-24)
+
+
+### Bug Fixes
+
+* stabilize error handling ([ae6f855](https://github.com/OGS-GmbH/use-axios/commit/ae6f8553d8bfdc6e6f91d479f37ac468529c1295))
+
 ## [1.0.1](https://github.com/OGS-GmbH/use-axios/compare/v1.0.0...v1.0.1) (2026-03-23)
 
 
