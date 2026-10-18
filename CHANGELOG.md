@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/OGS-GmbH/use-axios/compare/v1.0.2...v1.0.3) (2026-10-18)
+
+
+### Bug Fixes
+
+* reject execute promise on axios throw ([c710bd2](https://github.com/OGS-GmbH/use-axios/commit/c710bd258200373e224034bea25d3f00c2dedbc2))
+
 ## [1.0.2](https://github.com/OGS-GmbH/use-axios/compare/v1.0.1...v1.0.2) (2026-06-24)
 
 
