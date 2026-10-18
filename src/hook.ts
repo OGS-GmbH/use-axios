@@ -62,7 +62,7 @@ function useAxios<TData, TError>({
         ...executeAxiosRequestConfig
       });
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         thenableResponse
           .then((thenableInnerResponse) => {
             setCycle("success");
@@ -72,7 +72,7 @@ function useAxios<TData, TError>({
           .catch((thenableInnerResponse) => {
             setCycle("error");
             setResponse(thenableInnerResponse);
-            resolve(thenableInnerResponse);
+            reject(thenableInnerResponse);
           });
       });
     },
